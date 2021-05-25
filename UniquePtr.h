@@ -2,13 +2,12 @@
 
 #include <cstdlib>
 
-using ValueType = char;
-
+template<typename T>
 class UniquePtr {
 public:
     UniquePtr();
-    explicit UniquePtr(ValueType* ptr);
-    UniquePtr(const ValueType& o) = delete;
+    explicit UniquePtr(T* ptr);
+    UniquePtr(const T& o) = delete;
     UniquePtr(UniquePtr&& o) noexcept;
     UniquePtr(const UniquePtr& o) = delete;
 
@@ -16,18 +15,18 @@ public:
 
     UniquePtr& operator=(UniquePtr&& o) noexcept;
     UniquePtr& operator=(const UniquePtr& o) = delete;
-    UniquePtr& operator=(ValueType* ptr);
+    UniquePtr& operator=(T* ptr);
 
-    ValueType& operator*() const;
-    ValueType* operator->() const;
-    ValueType& operator[](const size_t idx);
-    const ValueType& operator[](const size_t idx) const;
-    ValueType* get() const;
+    T& operator*() const;
+    T* operator->() const;
+    T& operator[](const size_t idx);
+    const T& operator[](const size_t idx) const;
+    T* get() const;
     operator bool() const;
 
     void reset();
-    void reset(ValueType* ptr);
+    void reset(T* ptr);
     void release();
 private:
-    ValueType* _ptr;
+    T* _ptr;
 };

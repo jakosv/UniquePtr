@@ -1,24 +1,29 @@
 #include "UniquePtr.h"
 
-UniquePtr::UniquePtr() {
+template<typename T>
+UniquePtr<T>::UniquePtr() {
     _ptr = nullptr;
 }
 
-UniquePtr::UniquePtr(ValueType* ptr) {
+template<typename T>
+UniquePtr<T>::UniquePtr(T* ptr) {
     _ptr = ptr;
 }
 
-UniquePtr::UniquePtr(UniquePtr&& o) noexcept {
+template<typename T>
+UniquePtr<T>::UniquePtr(UniquePtr<T>&& o) noexcept {
     _ptr = o._ptr;
     o._ptr = nullptr;
 }
 
-UniquePtr::~UniquePtr() {
+template<typename T>
+UniquePtr<T>::~UniquePtr() {
     delete[] _ptr;
     _ptr = nullptr;
 }
 
-UniquePtr& UniquePtr::operator=(UniquePtr&& o) noexcept {
+template<typename T>
+UniquePtr<T>& UniquePtr<T>::operator=(UniquePtr<T>&& o) noexcept {
     if (this != &o) {
         this->reset();
         _ptr = o._ptr;
@@ -27,45 +32,61 @@ UniquePtr& UniquePtr::operator=(UniquePtr&& o) noexcept {
     return *this;
 }
 
-UniquePtr& UniquePtr::operator=(ValueType* ptr) {
+template<typename T>
+UniquePtr<T>& UniquePtr<T>::operator=(T* ptr) {
     this->reset();
     _ptr = ptr;
     return *this;
 } 
 
-ValueType& UniquePtr::operator*() const {
+template<typename T>
+T& UniquePtr<T>::operator*() const {
     return *_ptr;
 }
 
-ValueType* UniquePtr::get() const {
+template<typename T>
+T* UniquePtr<T>::get() const {
     return _ptr;
 }
 
-ValueType* UniquePtr::operator->() const {
+template<typename T>
+T* UniquePtr<T>::operator->() const {
     return _ptr;
 }
 
-ValueType& UniquePtr::operator[](const size_t idx) {
+template<typename T>
+T& UniquePtr<T>::operator[](const size_t idx) {
     return _ptr[idx];
 }
-const ValueType& UniquePtr::operator[](const size_t idx) const {
+
+template<typename T>
+const T& UniquePtr<T>::operator[](const size_t idx) const {
     return _ptr[idx];
 }
-    
-UniquePtr::operator bool() const {
+
+template<typename T>
+UniquePtr<T>::operator bool() const {
     return _ptr != nullptr;
 }
 
-void UniquePtr::reset() {
+template<typename T>
+void UniquePtr<T>::reset() {
     delete[] _ptr;
     _ptr = nullptr;
 }
 
-void UniquePtr::reset(ValueType* ptr) {
+template<typename T>
+void UniquePtr<T>::reset(T* ptr) {
     delete[] _ptr;
     _ptr = ptr;
 }
 
-void UniquePtr::release() {
+template<typename T>
+void UniquePtr<T>::release() {
     _ptr = nullptr;
 }
+
+template class UniquePtr<int>;
+template class UniquePtr<float>;
+template class UniquePtr<double>;
+template class UniquePtr<char>;
